@@ -7,3 +7,5 @@
 # python3 setup.py sdist bdist_wheel
 # pip3 install -e .
 # cd ..
+
+python3 scripts/setup/setup.py
