@@ -2,6 +2,8 @@ import os
 import torchvision.datasets
 import torchvision.transforms as transforms
 
+import research_project_name.data.utils
+
 available_datasets = ["mnist", "celeba", "cifar10", "svhn"]
 
 def load_dataset(dataroot, dataset_name, image_size, num_channels, **kwargs):
@@ -37,7 +39,7 @@ def load_dataset(dataroot, dataset_name, image_size, num_channels, **kwargs):
     if num_channels == 1 and dataset_name != 'mnist':
         transform_list.apppend(transforms.Grayscale())
     elif num_channels == 3 and dataset_name == 'mnist':
-        transform_list.append(transforms.Lambda(lambda x: x.repeat(3, 1, 1)))
+        transform_list.append(research_project_name.data.utils.GrayscaleToRGB())
 
     transform_list.append(transforms.Normalize((0.5,), (0.5,)))
 
