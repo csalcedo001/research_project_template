@@ -27,23 +27,24 @@ def load_dataset(dataroot, dataset_name, image_size, num_channels, **kwargs):
             num_channels
         ))
 
-    channel_transform = transforms.Lambda(lambda x: x)
 
-    if num_channels == 1 and dataset_name != 'mnist':
-        channel_transform = transforms.Grayscale()
-    elif num_channels == 3 and dataset_name == 'mnist':
-        channel_transform = transforms.Lambda(lambda x: x.repeat(3, 1, 1))
-
-
-
-    transform = transforms.Compose([
+    transform_list = [
         transforms.Resize(image_size),
         transforms.CenterCrop(image_size),
-        transforms.ToTensor(),
-        channel_transform,
-        transforms.Normalize((0.5,), (0.5,)),
-    ])
+        transforms.ToTensor()
+    ]
+
+    if num_channels == 1 and dataset_name != 'mnist':
+        transform_list.apppend(transforms.Grayscale())
+    elif num_channels == 3 and dataset_name == 'mnist':
+        transform_list.append(transforms.Lambda(lambda x: x.repeat(3, 1, 1)))
+
+    transform_list.append(transforms.Normalize((0.5,), (0.5,)))
+
+
+    transform = transforms.Compose(transform_list)
 
     dataset = dataset_function(root=os.path.join(dataroot, dataset_name), transform=transform, **kwargs)
+
 
     return dataset
