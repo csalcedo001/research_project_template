@@ -17,4 +17,11 @@ NEW_NAME=$2
 
 mv $OLD_NAME $NEW_NAME
 
-find . -type f -exec sed -i '' -- "s/$OLD_NAME/$NEW_NAME/g" {} +
+SED_I_FLAG=""
+
+if [[ "$(uname -s)" == "Darwin" ]] ;
+then
+    SED_I_FLAG="''"
+fi
+
+find . -type f -exec sed -i $SED_I_FLAG -- "s/$OLD_NAME/$NEW_NAME/g" {} +
